@@ -1,0 +1,32 @@
+name: Math-Utility Repo using Maven, JUnit & CI (GitHub Actions) | © 2023 giáo.làng
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 19 - Mượn JDK 19 của server Mỹ
+      uses: actions/setup-java@v3
+      with:
+        java-version: '19'
+        distribution: 'temurin'
+        cache: maven
+    - name: Build with Maven - Build app và chạy test cases hoặc màu xanh hoặc nhận mail chửi
+      run: mvn -B package --file pom.xml
+      
+    - name: Distribute jar-war file # Gửi file .jar .war đi đâu, CD nhảy vào ...
+      run: mkdir staging && cp target/*.jar staging # tạo thư mục staging chứa file .jar .war sau khi build      
+     
+    - name: Make hyperlink to jar-war file # Tạo hyperlink để download build 
+      uses: actions/upload-artifact@v1
+      with:
+        name: nha-tuyen-dung-download-jar-o-day.zip # Đây là hyperlink download .jar .war bên Mỹ
+        path: staging
